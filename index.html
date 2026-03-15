@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Informativa TDAH - Psic. Gesner Piamba Bustamante</title>
+    <style>
+        /* ESTILOS PROFESIONALES - ÁMBITO SALUD */
+        :root {
+            --primary-color: #005b96;
+            --secondary-color: #0392cf;
+            --accent-color: #7bc043;
+            --bg-color: #f4f9f9;
+            --card-bg: #ffffff;
+            --text-dark: #2c3e50;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 30px 15px;
+            border-bottom: 5px solid var(--accent-color);
+        }
+
+        .author-header {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* NAVEGACIÓN POR PÁGINAS (TABS) */
+        nav {
+            background: var(--white);
+            display: flex;
+            justify-content: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            flex-wrap: wrap;
+        }
+
+        nav button {
+            background: none;
+            border: none;
+            padding: 15px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--primary-color);
+            transition: 0.3s;
+        }
+
+        nav button:hover { background: #eef2f5; }
+        nav button.active { 
+            border-bottom: 4px solid var(--accent-color); 
+            color: var(--accent-color); 
+        }
+
+        /* CONTENEDORES DE SECCIÓN */
+        .content-section {
+            display: none;
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .content-section.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            border-left: 6px solid var(--secondary-color);
+        }
+
+        h2 { color: var(--primary-color); margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        h3 { color: var(--secondary-color); margin: 25px 0 15px; }
+        
+        ul, ol { margin-left: 25px; margin-bottom: 20px; }
+        li { margin-bottom: 10px; }
+        p { margin-bottom: 15px; }
+
+        /* INTERACTIVIDAD: ACORDEONES */
+        .accordion {
+            background: #eef7ff;
+            color: var(--primary-color);
+            cursor: pointer;
+            padding: 15px;
+            width: 100%;
+            text-align: left;
+            border: 1px solid #d0e4f5;
+            outline: none;
+            transition: 0.4s;
+            font-weight: bold;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .accordion:hover { background: #dceefc; }
+        .panel {
+            padding: 0 18px;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            border-left: 2px solid var(--accent-color);
+        }
+
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+
+        .emoji { margin-right: 10px; }
+        .highlight-box {
+            background-color: #fdfae6;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #f1e5a1;
+            margin: 15px 0;
+        }
+
+        /* ESTILOS NUEVOS PARA CÁPSULAS (GRID) */
+        .capsule-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .capsule {
+            background: #fff;
+            border: 1px solid #e1e8ed;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.04);
+            border-top: 4px solid var(--secondary-color);
+        }
+        .capsule h4 { color: var(--primary-color); margin-bottom: 10px; font-size: 1.05rem; }
+        .capsule-label { color: var(--accent-color); font-weight: bold; font-size: 0.9rem; display: block; margin-top: 8px;}
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🧠 Comprendiendo el TDAH: Guía Integral Informativa</h1>
+    <div class="author-header">Psic. Gesner Piamba Bustamante</div>
+</header>
+
+<!-- Menú -->
+
+<nav id="mainNav">
+    <button onclick="showSection('sec1')" id="btn-sec1" class="active">Definición</button>
+    <button onclick="showSection('sec2')" id="btn-sec2">Crianza</button>
+    <button onclick="showSection('sec3')" id="btn-sec3">Escuela</button>
+    <button onclick="showSection('sec4')" id="btn-sec4">Preguntas Frecuentes</button>
+</nav>
+
+
+
+<main>
+    <section id="sec1" class="content-section active">
+        <div class="card">
+
+<!-- SECCION 1 -->
+            <h2><span class="emoji">📖</span>Definición</h2>
+            <p>El Trastorno por Déficit de Atención e Intervención (TDAH) es un trastorno del neurodesarrollo de origen biológico que afecta la manera en que el cerebro gestiona la atención, el control de los impulsos y el nivel de actividad.</p>
+            <p>A continuación, te presento una definición desglosada para entenderlo mejor:</p>
+            <ul>
+                <li><strong>Es Neurobiológico:</strong> No es falta de disciplina ni pereza. Existe una diferencia real en la química del cerebro (especialmente en la dopamina y la noradrenalina) y en la maduración de las áreas que controlan el comportamiento.</li>
+                <li><strong>Afecta las Funciones Ejecutivas:</strong> Es, en esencia, un fallo en el "sistema operativo" del cerebro. Esto dificulta la capacidad de organizar tareas, recordar instrucciones, planificar el futuro y regular las emociones.</li>
+                <li><strong>Se manifiesta en tres áreas principales:</strong>
+                    <ul>
+                        <li><strong>Inatención:</strong> Dificultad para mantener el foco en tareas largas o que no ofrecen una recompensa inmediata.</li>
+                        <li><strong>Hiperactividad:</strong> Una sensación de motor interno que no para, que se traduce en movimiento excesivo o inquietud mental.</li>
+                        <li><strong>Impulsividad:</strong> Actuar antes de pensar, lo que lleva a interrumpir a otros o tomar decisiones sin medir las consecuencias.</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+<!-- FUNCIONES EJECUTIVAS -->
+        <div class="card">
+            <h3>Funciones Ejecutivas Afectadas</h3>
+            <p>Las funciones ejecutivas son como el "director de orquesta" del cerebro. En niños con TDAH, este director suele estar distraído o fuera de ritmo:</p>
+            <ul>
+                <li><strong>Inhibición:</strong> Dificultad para resistir impulsos o pensar antes de actuar. Es lo que causa que interrumpan o actúen sin medir riesgos.</li>
+                <li><strong>Memoria de Trabajo:</strong> Problemas para retener información a corto plazo mientras realizan una tarea (ej. olvidar las instrucciones que les acabas de dar).</li>
+                <li><strong>Flexibilidad Cognitiva:</strong> Dificultad para cambiar de una actividad a otra o para adaptarse cuando los planes cambian de repente.</li>
+                <li><strong>Planificación y Organización:</strong> Dificultad para desglosar una tarea compleja en pasos pequeños o para gestionar el orden de sus pertenencias.</li>
+                <li><strong>Monitoreo (Autosupervisión):</strong> Les cuesta darse cuenta de sus propios errores mientras están haciendo algo o evaluar cómo su conducta afecta a los demás.</li>
+            </ul>
+        </div>
+
+        <h3>💡 Claves para el Acompañamiento Efectivo</h3>
+        <button class="accordion">Ver recomendaciones <span>▼</span></button>
+        <div class="panel">
+            <div class="panel-content" style="padding: 15px 0;">
+                <ul>
+                    <li><strong>Implementar la técnica del "Semáforo Visual":</strong>Implementar la técnica del "Semáforo Visual". Antes de actuar o responder, el niño debe ver una señal de "Pare" (física o gestual), contar mentalmente hasta 5 y luego proceder. Esto crea un espacio obligatorio para que el cerebro procese el impulso. </li>
+                    <li><strong>Utilizar "Instrucciones de un solo paso":</strong> •	Utilizar "Instrucciones de un solo paso". Evitar dar órdenes múltiples. La instrucción debe ser corta, directa y, de ser posible, estar escrita en un post-it o en la esquina del tablero para que el niño pueda consultarla si olvida qué estaba haciendo.</li>
+                    <li><strong>Usar "Avisos de Transición":</strong> No cambiar de actividad bruscamente; avisar que faltan 10, 5 y 2 minutos para terminar. Ver el tiempo "desaparecer" en un reloj de arena o cronómetro ayuda al cerebro a prepararse para el cambio sin entrar en crisis.</li>
+                    <li><strong>Aplicar el "Método de los 3 Pasos":</strong> Cualquier tarea compleja (limpiar el cuarto o hacer un proyecto escolar) se debe desglosar en solo tres micro-tareas claras. Una vez completadas, se tachan en una lista de chequeo física para dar una sensación de logro.</li>
+                    <li><strong>Crear una "Estación de Revisión":</strong>  Al finalizar cualquier actividad, se le pide al niño que actúe como un "detective" para encontrar al menos un error o verificar que cumplió con los objetivos (ej. "¿Están todos los lápices en la cartuchera?" o "¿Puse mi nombre en la hoja?").</li>
+                </ul>
+            </div>
+        </div>
+
+<!-- HABILIDADES SOCIALES -->
+
+        <div class="card" style="margin-top:20px;">
+            <h3>🤝 Habilidades Socioemocionales</h3>
+            <ul>
+                <li><strong>Regulación Emocional:</strong> Tienen una baja tolerancia a la frustración y sus reacciones emocionales suelen ser más intensas y rápidas que las de otros niños.</li>
+                <li><strong>Percepción del Tiempo:</strong> No calculan cuánto duran 10 minutos o cuánto falta para una entrega, lo que genera procrastinación.</li>
+                <li><strong>Motivación Intrínseca:</strong> Les cuesta mucho esfuerzo iniciar tareas que no ofrecen una recompensa inmediata (como los deberes), ya que su cerebro busca estímulos de dopamina instantáneos.</li>
+                <li><strong>Habilidades Sociales:</strong> Debido a la impulsividad y a no leer bien las señales sociales (turnos de palabra, espacio personal), pueden tener roces con sus pares.</li>
+                <li><strong>Intrusividad:</strong> Interrumpen conversaciones, no respetan el espacio personal o tocan objetos ajenos sin permiso.</li>
+                <li><strong>Lectura de señales no verbales:</strong> No notan el aburrimiento o molestia de los demás.</li>
+                <li><strong>Reglas de los juegos:</strong> En juegos de equipo, su impulsividad hace que quieran cambiar las reglas a su favor o que no soporten perder, lo que causa conflictos.</li>
+                <li><strong>Baja empatía cognitiva inmediata:</strong> No es que no sientan el dolor ajeno, sino que en el momento del impulso, su cerebro no se detiene a pensar: "¿Cómo se sentirá mi amigo si le quito esto?".</li>
+            </ul>
+        </div>
+
+        <h3>🛠️ Estrategias para Regulación, Tiempo y Socialización</h3>
+        <button class="accordion">Ver Recomendaciones <span>▼</span></button>
+        <div class="panel">
+            <div class="panel-content" style="padding: 15px 0;">
+                <p><strong>1. Regulación Emocional:</strong> Utilizar la "Escala del Termómetro". Ayudar al niño a identificar visualmente cuándo su frustración está en "amarillo" para aplicar una técnica de calma (como respirar o cambiar de lugar) antes de llegar al "rojo" (explosión). Validar su emoción sin juzgarla antes de proponer una solución.</p>
+                <p><strong>2. Percepción del Tiempo:</strong> Implementar "Relojes de Arena o Visuales". Para combatir la "ceguera temporal", el niño debe ver cómo se agota el tiempo. No basta con decir "faltan 5 minutos"; necesita un cronómetro de color que se reduzca físicamente para que el concepto de duración sea real.</p>
+                <p><strong>3. Motivación Intrínseca:</strong> Aplicar el "Sistema de Recompensas de Corto Plazo". Dado que su cerebro busca dopamina inmediata, hay que dividir las tareas largas en metas muy pequeñas con un refuerzo al instante (ej. "termina estos dos problemas y puedes estirarte 1 minuto"). El premio lejano no funciona; el incentivo debe ser ahora.</p>
+                <p><strong>4. Habilidades Sociales:</strong> Practicar el "Juego de Rol (Role-playing)". Antes de una fiesta o el recreo, ensayar situaciones específicas: cómo pedir un turno o cómo identificar si alguien está aburrido (mirar los ojos, la postura). Usar una señal privada (como un toque en el hombro) para avisarle si está siendo intrusivo sin evidenciarlo frente a sus pares.</p>
+                <p><strong>5. Reglas y Empatía:</strong> Establecer la "Pausa de Reflexión Previa". Antes de empezar un juego, repasar las reglas y acordar qué hacer si se pierde. Para la empatía, usar la pregunta: "¿Qué dice su cara?". En lugar de regañarlo por quitar un juguete, guiar su mirada hacia la expresión de tristeza del otro niño para entrenar la conexión causa-efecto que su impulso bloqueó.</p>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top:20px;">
+            <h3>✨ Otras Habilidades Afectadas</h3>
+            <p><strong>1. La Fatiga Cognitiva:</strong> Muchos adultos piensan que el niño "no quiere", cuando en realidad "ya no puede".</p>
+            <ul>
+                <li><strong>Esfuerzo doble:</strong> Para un niño con TDAH, prestar atención 15 minutos equivale al esfuerzo mental que un niño sin el diagnóstico hace en una hora.</li>
+                <li><strong>El "Colapso" de la tarde:</strong> Al llegar a casa después del colegio, el niño ha agotado sus reservas de autocontrol. Por eso, las peores crisis de conducta suelen ocurrir al final del día.</li>
+            </ul>
+            <p><strong>2. Alteraciones Sensoriales:</strong> El TDAH suele venir acompañado de una dificultad para filtrar estímulos del ambiente:</p>
+            <ul>
+                <li><strong>Sobrecarga:</strong> Un aula con mucho ruido, luces muy brillantes o incluso la etiqueta de una camiseta pueden irritar su sistema nervioso.</li>
+                <li><strong>Respuesta defensiva:</strong> Esa irritación sensorial se traduce muchas veces en agresividad o en "encerrarse en sí mismo" para protegerse del entorno.</li>
+            </ul>
+            <p><strong>3. Sueño y Descanso:</strong> Existe una relación biológica directa entre el TDAH y el descanso:</p>
+            <ul>
+                <li><strong>Dificultad para "apagar" el cerebro:</strong> Les cuesta mucho conciliar el sueño porque su mente sigue acelerada.</li>
+                <li><strong>Sueño inquieto:</strong> Se mueven mucho durante la noche, lo que provoca que al día siguiente estén más irritables y con menos capacidad de atención (un círculo vicioso).</li>
+            </ul>
+            <p><strong>4. Autoestima:</strong> Este es quizás el aspecto más doloroso a largo plazo:</p>
+            <ul>
+                <li><strong>Acumulación de mensajes negativos:</strong> Se estima que un niño con TDAH recibe miles de correcciones y críticas más que un niño promedio ("Estate quieto", "Presta atención", "¿Por qué lo hiciste otra vez?").</li>
+                <li><strong>Sensación de "ser malo":</strong> Empiezan a creer que su identidad es el problema, lo que genera ansiedad, depresión o una actitud de "para qué lo intento si siempre fallo".</li>
+            </ul>
+            <p><strong>5. El Hiperenfoque:</strong> Aunque parezca contradictorio con la "falta de atención", el TDAH permite estados de concentración intensa:</p>
+            <ul>
+                <li><strong>Absorción Total:</strong> Si algo les apasiona (videojuegos, dibujo, un tema específico), pueden pasar horas sin comer, ir al baño o escuchar que les llaman.</li>
+                <li><strong>El Costo del Cambio:</strong> Sacarlos de ese estado de hiperenfoque es lo que suele disparar las conductas agresivas o de oposición, porque su cerebro siente una "ruptura" dolorosa de la actividad.</li>
+            </ul>
+            <p><strong>6. Coordinación y Autocuidado:</strong> A nivel físico y biológico, también hay manifestaciones claras:</p>
+            <ul>
+                <li><strong>Torpeza Motora:</strong> A menudo chocan con cosas, tiran vasos o tienen una letra muy difícil de leer (disgrafía). Esto se debe a una falla en la planificación motora del cerebro.</li>
+                <li><strong>Higiene y Rutinas:</strong> Tareas repetitivas como cepillarse los dientes, bañarse o vestirse son "aburridas" para su cerebro, lo que genera una resistencia constante a estas rutinas básicas.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="sec2" class="content-section">
+        <div class="card">
+            <h2><span class="emoji">🏡</span>Errores Comunes en la Crianza</h2>
+            <div class="capsule-container">
+                
+                <div class="capsule">
+                    <h4>1. Uso excesivo del sermón</h4>
+                    <p>Muchos padres intentan que el niño "entienda" su error mediante charlas largas.</p>
+                    <span class="capsule-label">⚠️ Por qué es un error:</span> El TDAH afecta la memoria de trabajo. A los 30 segundos, el niño ya perdió el hilo.
+                    <span class="capsule-label">📉 El resultado:</span> El niño se desconecta, se siente humillado y el adulto se frustra.
+                </div>
+
+                <div class="capsule">
+                    <h4>2. Consecuencias a largo plazo</h4>
+                    <p>Prometer un premio para fin de mes o castigar sin TV una semana.</p>
+                    <span class="capsule-label">⚠️ Por qué es un error:</span> Debido a la "ceguera temporal", el futuro no existe. Lo que no ocurre ya, pierde poder educativo.
+                    <span class="capsule-label">📉 El resultado:</span> Se siente castigado injustamente al no conectar acción y sanción.
+                </div>
+
+                <div class="capsule">
+                    <h4>3. Inconsistencia en reglas</h4>
+                    <p>Cambiar normas según el humor o permitir hoy lo que ayer se prohibió.</p>
+                    <span class="capsule-label">⚠️ Por qué es un error:</span> Necesitan estructura externa predecible. La inconsistencia genera ansiedad y rebeldía.
+                    <span class="capsule-label">📉 El resultado:</span> Siente que el mundo es injusto y azaroso, disparando la oposición.
+                </div>
+
+                <div class="capsule">
+                    <h4>4. Control mediante el grito</h4>
+                    <p>Usar la fuerza de la voz para "quebrar" la voluntad del niño.</p>
+                    <span class="capsule-label">⚠️ Por qué es un error:</span> Activa el sistema de defensa (lucha/huida). Funciona como gasolina en un incendio.
+                    <span class="capsule-label">📉 El resultado:</span> Agresividad, portazos, insultos y ruptura del vínculo.
+                </div>
+
+                <div class="capsule">
+                    <h4>5. No adaptar el entorno</h4>
+                    <p>Esperar comportamiento "normal" en sitios que superan su autocontrol (ej. cenas largas).</p>
+                    <span class="capsule-label">⚠️ Por qué es un error:</span> Es como pedirle a un miope que lea de lejos sin gafas. El entorno carece de "apoyos".
+                    <span class="capsule-label">📉 El resultado:</span> Fracaso garantizado y etiquetas negativas.
+                </div>
+
+                <div class="capsule">
+                    <h4>6. Atacar la identidad</h4>
+                    <p>Decir "eres desordenado" en lugar de "dejaste la ropa tirada".</p>
+                    <span class="capsule-label">⚠️ Por qué es un error:</span> El niño internaliza que él es el problema y deja de intentar ser "bueno".
+                    <span class="capsule-label">📉 El resultado:</span> Baja autoestima crónica, depresión o ansiedad.
+                </div>
+
+                <div class="capsule">
+                    <h4>7. Dar órdenes múltiples</h4>
+                    <p>"Recoge zapatos, lávate dientes, ponte pijama..."</p>
+                    <span class="capsule-label">⚠️ El error:</span> Su memoria de trabajo es limitada. En la segunda tarea, ya borró las demás.
+                    <span class="capsule-label">📉 La consecuencia:</span> Sientes que te ignora, pero él simplemente "perdió el archivo".
+                </div>
+
+                <div class="capsule">
+                    <h4>8. Quitar refuerzo ganado</h4>
+                    <p>Quitar todos los puntos ganados por una falta impulsiva.</p>
+                    <span class="capsule-label">⚠️ El error:</span> Destruye la motivación. Si el esfuerzo de días se borra en un segundo, dejará de esforzarse.
+                    <span class="capsule-label">📉 La consecuencia:</span> Siente que "nunca puede ganar" y abandona.
+                </div>
+
+                <div class="capsule">
+                    <h4>9. Asumir mala intención</h4>
+                    <p>Creer que elige no atender o ser inquieto para molestar.</p>
+                    <span class="capsule-label">⚠️ El error:</span> Atribuir malicia a síntomas neurológicos genera resentimiento en el padre.
+                    <span class="capsule-label">📉 La consecuencia:</span> Ambiente de hostilidad constante.
+                </div>
+
+                <div class="capsule">
+                    <h4>10. No dar tiempos de transición</h4>
+                    <p>Cortar una actividad placentera de golpe: "Apaga ya".</p>
+                    <span class="capsule-label">⚠️ El error:</span> Dificultad en flexibilidad cognitiva. Necesitan "avisos de desembarco".
+                    <span class="capsule-label">📉 La consecuencia:</span> Explosiones de rabia evitables.
+                </div>
+
+                <div class="capsule">
+                    <h4>11. Sobreproteger</h4>
+                    <p>Hacerle la mochila o recogerle todo para ir rápido.</p>
+                    <span class="capsule-label">⚠️ El error:</span> Impide desarrollar estrategias de compensación y responsabilidad.
+                    <span class="capsule-label">📉 La consecuencia:</span> Dependencia en la adolescencia/adultez.
+                </div>
+
+                <div class="capsule">
+                    <h4>12. Ignorar autocuidado de padres</h4>
+                    <p>Criar con el "tanque vacío" sin pedir ayuda.</p>
+                    <span class="capsule-label">⚠️ El error:</span> Un padre agotado no tiene paciencia para regularse, reaccionando impulsivamente.
+                    <span class="capsule-label">📉 La consecuencia:</span> Círculo vicioso de gritos y culpa.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="sec3" class="content-section">
+        <div class="card">
+            <h2><span class="emoji">🏫</span>Errores Comunes en la Escuela</h2>
+            <div class="capsule-container">
+                <div class="capsule">
+                    <h4>1. Mito de la "Falta de Interés"</h4>
+                    <p>Creer que si el niño se concentra en un videojuego, "podría concentrarse en clase si quisiera".</p>
+                    <span class="capsule-label">⚠️ La realidad:</span> El TDAH es un problema de regulación de la atención, no de falta de ella. Su cerebro no dirige la atención a estímulos sin dopamina inmediata.
+                    <span class="capsule-label">📉 El resultado:</span> Se le etiqueta de vago o manipulador, cuando su cerebro está "apagado" ante el estímulo escolar.
+                </div>
+
+                <div class="capsule">
+                    <h4>2. Sancionar sin recreo</h4>
+                    <p>Quitarle el único momento del día donde el niño puede liberar energía física y descansar.</p>
+                    <span class="capsule-label">⚠️ El error:</span> Es una práctica común y contraproducente. Le quita el único momento para liberar energía y descansar de la carga cognitiva.
+                    <span class="capsule-label">📉 El resultado:</span> Regresa a clase con más ansiedad, inquietud motora y menos autocontrol.
+                </div>
+
+                <div class="capsule">
+                    <h4>3. Evaluar solo el resultado</h4>
+                    <p>Calificar únicamente el examen final o el trabajo entregado sin considerar las dificultades ejecutivas.</p>
+                    <span class="capsule-label">⚠️ El error:</span> No dar crédito por el esfuerzo de organización. Puede saber la respuesta pero perder la hoja, olvidar el nombre o saltarse una página.
+                    <span class="capsule-label">📉 El resultado:</span> Frustración extrema. Siente que su "sistema" siempre le falla y deja de intentarlo.
+                </div>
+
+                <div class="capsule">
+                    <h4>4. Instrucciones verbales largas</h4>
+                    <p>Dictar tareas o dar órdenes de varios pasos mientras hay ruido en el salón.</p>
+                    <span class="capsule-label">⚠️ El error:</span> Confiar en que retendrá la información como compañeros neurotípicos. Su memoria de trabajo se satura.
+                    <span class="capsule-label">📉 El resultado:</span> Se queda paralizado, sin saber qué hacer, o molesta a otros por no entender.
+                </div>
+
+                <div class="capsule">
+                    <h4>5. No permitir el movimiento</h4>
+                    <p>Exigir que el niño esté "estatua" en la silla para demostrar que atiende.</p>
+                    <span class="capsule-label">⚠️ El error:</span> Para muchos, el movimiento es autoestimulación para mantener el cerebro despierto. Si se les obliga a estar quietos, toda su energía mental se va en "intentar no moverse".
+                    <span class="capsule-label">📉 El resultado:</span> Fatiga cognitiva rápida y desconexión total de la lección.
+                </div>
+
+                <div class="capsule">
+                    <h4>6. Efecto Fila de Atrás</h4>
+                    <p>Sentar al niño al fondo del salón para que no distraiga a los demás, o en un rincón aislado.</p>
+                    <span class="capsule-label">⚠️ El error:</span> Necesita estar cerca del docente, lejos de distracciones y con contacto visual frecuente para "reconectarlo".
+                    <span class="capsule-label">📉 El resultado:</span> Se siente excluido y su mente "viaja", perdiendo el hilo de la escolaridad.
+                </div>
+
+                <div class="capsule">
+                    <h4>7. Sobrecarga de deberes</h4>
+                    <p>Enviar a casa todo lo que el niño no terminó en clase por su lentitud de procesamiento.</p>
+                    <span class="capsule-label">⚠️ El error:</span> Convierte la casa en un campo de batalla. Un niño agotado no puede enfrentar 3 horas más de tareas sin colapsar.
+                    <span class="capsule-label">📉 El resultado:</span> Destrucción del vínculo familiar y rechazo total hacia el estudio.
+                </div>
+
+                <div class="capsule">
+                    <h4>8. Copia del Tablero</h4>
+                    <p>Asumir que si un niño no copia la lección del tablero, es porque es perezoso o no quiere trabajar.</p>
+                    <span class="capsule-label">⚠️ El error:</span> Copiar requiere alta coordinación de funciones ejecutivas. Para un niño con TDAH, es agotador y se interrumpe con cualquier ruido.
+                    <span class="capsule-label">📉 El resultado:</span> Pasa la hora estresado intentando copiar, sin procesar nada. Cuaderno incompleto y cero aprendizaje real.
+                </div>
+
+                <div class="capsule">
+                    <h4>9. Transiciones bruscas</h4>
+                    <p>Pasar de una materia a otra o del recreo al salón de clases sin previo aviso.</p>
+                    <span class="capsule-label">⚠️ El error:</span> El cerebro con TDAH tiene dificultad con la flexibilidad cognitiva. Necesitan "avisos de desembarco".
+                    <span class="capsule-label">📉 El resultado:</span> Explosiones de rabia, mal humor o lentitud extrema, porque su mente sigue atrapada en la actividad anterior.
+                </div>
+
+                <div class="capsule">
+                    <h4>10. Sesgo de Inteligencia vs. Rendimiento</h4>
+                    <p>Creer que porque el niño es muy inteligente o creativo, "debería" ser capaz de organizarse solo.</p>
+                    <span class="capsule-label">⚠️ El error:</span> Inteligencia (CI) y funciones ejecutivas (organización) son diferentes. Se puede ser genio e incapaz de organizarse.
+                    <span class="capsule-label">📉 El resultado:</span> Se le exige una autonomía para la que no tiene herramientas biológicas, generando una brecha entre potencial y notas, sintiéndose "tonto".
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="sec4" class="content-section">
+        <div class="card">
+            <h2><span class="emoji">❓</span>Preguntas Frecuentes</h2>
+            
+            <button class="accordion">1. ¿Por qué no aprende de sus errores? <span>▼</span></button>
+            <div class="panel">
+                <div class="panel-content" style="padding: 15px 0;">
+                    <p>A diferencia de otros niños que guardan la experiencia de un error para no repetirlo, el niño con TDAH tiene dificultades con la memoria de trabajo y el análisis retrospectivo:</p>
+                    <ul>
+                        <li><strong>Reflexión:</strong> Su cerebro no suele analizar automáticamente qué hizo mal justo después de que sucede. Vive tanto en el "aquí y ahora" que el pasado inmediato se borra rápido.</li>
+                        <li><strong>Dificultad de Conexión:</strong> Le cuesta conectar la causa (su acción) con la consecuencia (el error), especialmente si la consecuencia no es inmediata.</li>
+                        <li><strong>Impulsividad Dominante:</strong> El impulso de hacer algo es tan fuerte que "pisa" el recuerdo de la última vez que eso salió mal. El deseo de actuar gana siempre a la reflexión.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button class="accordion">2. ¿Por qué parece que no obedece cuando se le habla? <span>▼</span></button>
+            <div class="panel">
+                <div class="panel-content" style="padding: 15px 0;">
+                    <p>A menudo se confunde con rebeldía, pero suele ser un problema de atención sostenida y procesamiento:</p>
+                    <ul>
+                        <li><strong>Sordera Atencional:</strong> Si está concentrado en algo (un juego, la TV), su cerebro bloquea los estímulos externos. Realmente no "oye" la instrucción a nivel consciente.</li>
+                        <li><strong>Fragmentación de Mensajes:</strong> Si le das una instrucción larga (ej. "recoge los juguetes, lávate las manos y ven a cenar"), su memoria de trabajo solo retiene el primer o el último paso. El resto desaparece.</li>
+                        <li><strong>Interferencia de Estímulos:</strong> Cualquier ruido o movimiento ambiental lo distrae mientras le hablas, rompiendo el hilo de la orden que estás dando.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button class="accordion">3. ¿Por qué reacciona agresivo ante la imposición? <span>▼</span></button>
+            <div class="panel">
+                <div class="panel-content" style="padding: 15px 0;">
+                    <p>Cuando un adulto intenta imponer autoridad mediante la fuerza o el control rígido, choca con la desregulación emocional propia del diagnóstico:</p>
+                    <ul>
+                        <li><strong>Hipersensibilidad a la Injusticia:</strong> Muchos niños con TDAH perciben la imposición autoritaria como una amenaza o un ataque personal, lo que activa su sistema de "lucha o huida".</li>
+                        <li><strong>Baja Tolerancia a la Frustración:</strong> Al sentirse acorralados o sin opciones, su cerebro no sabe gestionar esa tensión y estalla en agresividad como una forma de escape o defensa.</li>
+                        <li><strong>Rigidez Cognitiva:</strong> Si el niño está enfocado en una idea y se le impone un cambio brusco "porque sí", su cerebro entra en corto circuito. No tiene las herramientas para calmarse solo y transicionar de forma pacífica.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p><strong>Página Informativa sobre el TDAH</strong></p>
+    <p>Desarrollado para fines de orientación profesional.</p>
+    <p style="margin-top: 15px; font-size: 1.1rem;">&copy; 2026 - Autoría: <strong>Psic. Gesner Piamba Bustamante</strong></p>
+</footer>
+
+<script>
+    // LÓGICA DE NAVEGACIÓN (SPA)
+    function showSection(sectionId) {
+        // Ocultar todas
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.classList.remove('active');
+        });
+        // Desactivar botones
+        document.querySelectorAll('nav button').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Mostrar seleccionada
+        document.getElementById(sectionId).classList.add('active');
+        document.getElementById('btn-' + sectionId).classList.add('active');
+        
+        // Scroll al inicio suave
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    // LÓGICA DE ACORDEONES
+    var acc = document.getElementsByClassName("accordion");
+    for (var i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.maxHeight) {
+                panel.style.maxHeight = null;
+            } else {
+                panel.style.maxHeight = panel.scrollHeight + "px";
+            } 
+        });
+    }
+</script>
+
+</body>
+</html>
