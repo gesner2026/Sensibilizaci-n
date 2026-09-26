@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OVA: Análisis Conductual Aplicado (ABA)</title>
+    <style>
+        /* =========================================================
+           VARIABLES Y ESTILOS SISTEMA DE SALUD / EDUCACIÓN CLÍNICA
+           ========================================================= */
+        :root {
+            --primary-color: #005b96;
+            --primary-dark: #003d66;
+            --secondary-color: #0392cf;
+            --accent-color: #2ec4b6;
+            --bg-color: #f4f8fa;
+            --card-bg: #ffffff;
+            --text-dark: #2c3e50;
+            --border-color: #e1e8ed;
+            --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.04);
+            --shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* HEADER PROFESIONAL DE SALUD - TÍTULO Y AUTOR CENTRADOS */
+        header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
+            color: white;
+            text-align: center;
+            padding: 35px 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        }
+
+        header h1 {
+            font-size: 2.1rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+
+        .author-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #d1ecf1;
+            text-align: center;
+        }
+
+        /* BOTÓN DE MENÚ HAMBURGUESA (ESQUINA SUPERIOR DERECHA) */
+        .menu-toggle-btn {
+            position: fixed;
+            top: 20px;
+            right: 25px;
+            z-index: 2000;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .menu-toggle-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* MENÚ VERTICAL DESPLEGABLE (DRAWER LATERAL) */
+        .sidebar-drawer {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 300px;
+            height: 100%;
+            background-color: #ffffff;
+            z-index: 1900;
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+            transition: right 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            padding-top: 80px;
+        }
+
+        .sidebar-drawer.open {
+            right: 0;
+        }
+
+        .sidebar-drawer-header {
+            padding: 0 25px 15px;
+            font-weight: 700;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--border-color);
+            font-size: 1.1rem;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 15px 0;
+        }
+
+        .sidebar-nav button {
+            background: none;
+            border: none;
+            padding: 15px 25px;
+            text-align: left;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: var(--transition);
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar-nav button:hover {
+            background-color: #eef7ff;
+            color: var(--primary-color);
+            border-left-color: var(--secondary-color);
+        }
+
+        .sidebar-nav button.active {
+            background-color: #eef7ff;
+            color: var(--primary-color);
+            border-left-color: var(--accent-color);
+        }
+
+        /* OVERLAY PARA CERRAR EL MENÚ */
+        .drawer-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1800;
+            display: none;
+        }
+
+        .drawer-overlay.active {
+            display: block;
+        }
+
+        /* MAIN CONTENT AREA */
+        main {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+            flex: 1;
+            width: 100%;
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* TARJETAS CONTENEDORAS */
+        .card {
+            background: var(--card-bg);
+            padding: 28px 32px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+            border-left: 6px solid var(--secondary-color);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 18px;
+            border-bottom: 2px solid #eef2f5;
+            padding-bottom: 10px;
+            font-size: 1.45rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--secondary-color);
+            margin: 22px 0 12px;
+            font-size: 1.2rem;
+        }
+
+        p { margin-bottom: 15px; }
+        ul, ol { margin-left: 24px; margin-bottom: 18px; }
+        li { margin-bottom: 8px; }
+
+        .highlight-box {
+            background-color: #eef7ff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #d0e4f5;
+            border-left: 5px solid var(--primary-color);
+            margin: 20px 0;
+        }
+
+        /* REPRODUCTOR DE VIDEO RESPONSIVO */
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 10px;
+            margin: 20px 0;
+            background-color: #000;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border: 0;
+        }
+
+        /* CÁPSULAS Y REJILLAS DE INFORMACIÓN */
+        .capsule-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .capsule {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: var(--shadow-soft);
+            border-top: 4px solid var(--secondary-color);
+            transition: var(--transition);
+        }
+
+        .capsule:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        .capsule h4 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .capsule-action {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 6px 12px;
+            background: var(--secondary-color);
+            color: white;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+        }
+
+        .capsule-action:hover {
+            background: var(--primary-color);
+        }
+
+        /* STEPPER DIAGRAM */
+        .stepper-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .step-item {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 18px 22px;
+            transition: var(--transition);
+        }
+
+        .step-item.active {
+            border-left-color: var(--accent-color);
+            background-color: #f8fcff;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .step-number {
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .step-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease;
+            padding-top: 0;
+        }
+
+        .step-item.active .step-body {
+            max-height: 1000px;
+            padding-top: 15px;
+        }
+
+        /* ACORDEONES INTERACTIVOS */
+        .accordion {
+            background: #eef7ff;
+            color: var(--primary-color);
+            cursor: pointer;
+            padding: 16px 20px;
+            width: 100%;
+            text-align: left;
+            border: 1px solid #d0e4f5;
+            outline: none;
+            transition: var(--transition);
+            font-weight: 600;
+            border-radius: 8px;
+            margin-top: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .accordion:hover, .accordion.active {
+            background: #dceefc;
+        }
+
+        .panel {
+            padding: 0 20px;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            border-left: 3px solid var(--accent-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+
+        .panel-content { padding: 18px 0; }
+
+        /* TABLAS DENSAS RESPONSIVAS */
+        .table-responsive {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover { background-color: #f8fafc; }
+
+        /* MODAL INTERACTIVO PARA ESTRATEGIAS */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-card {
+            background: white;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 100%;
+            padding: 25px 30px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            animation: modalIn 0.3s ease-out;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px; right: 20px;
+            background: none; border: none;
+            font-size: 1.5rem; cursor: pointer;
+            color: #6c757d;
+        }
+
+        /* FOOTER */
+        footer {
+            background-color: var(--primary-dark);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: auto;
+            font-size: 0.95rem;
+        }
+
+        footer p { margin-bottom: 6px; opacity: 0.9; }
+
+        @media (max-width: 768px) {
+            header { padding: 25px 20px; }
+            header h1 { font-size: 1.5rem; }
+            .card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- BOTÓN MENÚ ESQUINA SUPERIOR DERECHA -->
+<button class="menu-toggle-btn" onclick="toggleMenu()">
+    <span>☰</span> Menú
+</button>
+
+<!-- OVERLAY DE FONDO AL ABRIR MENÚ -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeMenu()"></div>
+
+<!-- MENÚ VERTICAL DESPLEGABLE CON NOMBRES COMPLETOS -->
+<div class="sidebar-drawer" id="sidebarDrawer">
+    <div class="sidebar-drawer-header">Navegación de Páginas</div>
+    <div class="sidebar-nav">
+        <button onclick="navigateTo('sec0')" id="btn-sec0" class="active">📌 Presentación</button>
+        <button onclick="navigateTo('sec1')" id="btn-sec1">💡 Conceptualización</button>
+        <button onclick="navigateTo('sec2')" id="btn-sec2">📋 Plan de Intervención</button>
+        <button onclick="navigateTo('sec3')" id="btn-sec3">⚙️ Funciones de la Conducta</button>
+        <button onclick="navigateTo('sec4')" id="btn-sec4">🔬 Análisis Funcional</button>
+        <button onclick="navigateTo('sec5')" id="btn-sec5">🛠️ Estrategias de Implementación</button>
+        <button onclick="navigateTo('sec6')" id="btn-sec6">📁 Socialización del Caso Clínico</button>
+        <button onclick="navigateTo('sec7')" id="btn-sec7">📚 Referencias Bibliográficas</button>
+    </div>
+</div>
+
+<header>
+    <h1>Análisis Conductual Aplicado (ABA)</h1>
+    <div class="author-header">Autor: Psic. Gesner Piamba Bustamante</div>
+</header>
+
+<main>
+
+    <!-- SECCIÓN 0: PRESENTACIÓN -->
+    <section id="sec0" class="content-section active">
+        <div class="card">
+            <h2>🎯 Objetivo Pedagógico del OVA</h2>
+            <p>El objetivo pedagógico de este objeto virtual de aprendizaje es capacitar a los estudiantes de psicología en la fundamentación teórica y la aplicación clínica del Análisis Conductual Aplicado (ABA), brindándoles herramientas metodológicas para llevar a cabo la evaluación funcional de la conducta.</p>
+        </div>
+
+        <div class="card">
+            <h2>⚖️ Justificación del OVA</h2>
+            <p>Esta propuesta formativa se justifica en la necesidad de dotar a los futuros psicólogos en competencias clínicas basadas en evidencia científica para el abordaje de conductas disfuncionales y la adquisición de habilidades adaptativas en niños y adolescentes diagnosticados con trastornos del neurodesarrollo, garantizando que el ejercicio profesional trascienda la etiqueta diagnóstica e impacte positivamente la calidad de vida de los usuarios y sus familias en los contextos clínico, escolar y comunitario.</p>
+        </div>
+
+        <div class="highlight-box">
+            <h3 style="margin-top:0;">✉️ Invitación a aplicar los conocimientos adquiridos</h3>
+            <p style="margin-bottom:0;">Estimados estudiantes de psicología, los invito a apropiarse activamente de estos conceptos y llevar el rigor del análisis funcional a su práctica formativa, entendiendo que cada registro conductual, cada moldeamiento de respuesta y cada reforzamiento oportuno representan una oportunidad real para transformar vidas y construir autonomía en la infancia y adolescencia.</p>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 1: CONCEPTUALIZACIÓN -->
+    <section id="sec1" class="content-section">
+        <div class="card">
+            <h2>📖 Conceptos Básicos en ABA</h2>
+            <p>El <strong>Análisis Conductual Aplicado (ABA - Applied Behavior Analysis)</strong> es una disciplina científica basada en los principios del aprendizaje y del comportamiento humano. Su objetivo principal es incrementar conductas adaptativas (comunicación, autonomía, habilidades sociales y académicas) y reducir conductas disfuncionales o de riesgo mediante la modificación del entorno. No se enfoca en "cambiar a la persona", sino en enseñar nuevas habilidades que le permitan desempeñarse de forma autónoma.</p>
+            
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube-nocookie.com/embed/6FkGn9-FPQg?rel=0" title="Video explicativo ABA" allowfullscreen loading="lazy"></iframe>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📊 Criterios de Aplicación y Limitaciones</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Dimensión</th>
+                            <th>Indicaciones (Cuándo SÍ se aplica)</th>
+                            <th>Contraindicaciones y Limitaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Diagnósticos y Condiciones</strong></td>
+                            <td>
+                                • Trastorno del Espectro Autista (TEA).<br>
+                                • TDAH y perturbación de la atención.<br>
+                                • Discapacidad intelectual y retraso del desarrollo.<br>
+                                • Trastorno Negativista Desafiante (TND).<br>
+                                • Trastornos de la conducta alimentaria o del sueño de origen conductual.
+                            </td>
+                            <td>
+                                • Cuadros psiquiátricos agudos en crisis (ej. psicosis activa, descompensación severa del ánimo).<br>
+                                • Trauma severo no procesado sin acompañamiento de psicología clínica/trauma.<br>
+                                • Problemas cuyo origen sea exclusivamente médico o fisiológico sin abordar primero la causa orgánica.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Objetivos Terapéuticos</strong></td>
+                            <td>
+                                • Adquisición de lenguaje expresivo/receptivo y comunicación alternativa (PECS).<br>
+                                • Habilidades de autonomía e higiene (control de esfínteres, vestido).<br>
+                                • Reducción de autolesiones, agresiones o conductas destructivas.<br>
+                                • Incremento de habilidades sociales y seguimiento de instrucciones.
+                            </td>
+                            <td>
+                                • Intentar suprimir estereotipias o autorregulaciones no dañinas que el paciente usa para gestionar sobrecarga sensorial.<br>
+                                • Intentar "normalizar" forzadamente la neurodivergencia o eliminar rasgos de personalidad no perjudiciales.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Condiciones del Entorno</strong></td>
+                            <td>
+                                • Existencia de un equipo capacitado y posibilidad de involucrar a la familia para dar continuidad intercontextual.
+                            </td>
+                            <td>
+                                • Ausencia total de ética profesional (aplicar procedimientos aversivos o castigos sin consentimiento ni rigor).
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>⚠️ Desventajas y Desafíos Clínicos</h2>
+            <div class="capsule-grid">
+                <div class="capsule">
+                    <h4>Riesgo de rigidez o mecanización</h4>
+                    <p>Si el terapeuta no aplica la enseñanza en entornos naturales, el paciente puede aprender respuestas memorizadas sin comprender el contexto social.</p>
+                </div>
+                <div class="capsule">
+                    <h4>Dificultad en la generalización</h4>
+                    <p>Las habilidades aprendidas en mesa o clínica pueden no transferirse automáticamente al hogar o la escuela si no se diseña un plan específico de generalización.</p>
+                </div>
+                <div class="capsule">
+                    <h4>Alta intensidad requerida</h4>
+                    <p>Suele exigir programas de varias horas semanales, lo que representa una carga económica, de tiempo y emocional importante para las familias.</p>
+                </div>
+                <div class="capsule">
+                    <h4>Dependencia de apoyos (prompts)</h4>
+                    <p>Un desvanecimiento inadecuado de las ayudas puede hacer que el niño solo responda cuando se le indica explícitamente qué hacer.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔄 Condicionamiento Operante y Operacionalización de la Conducta</h2>
+            <p><strong>¿Qué es el Condicionamiento Operante?</strong> Es un proceso de aprendizaje mediante el cual la probabilidad de que una conducta vuelva a ocurrir en el futuro depende directamente de sus consecuencias directas (estímulos presentados o retirados justo después de emitir la conducta).</p>
+
+            <div class="capsule-grid">
+                <div class="capsule">
+                    <h4>Refuerzo</h4>
+                    <p>Es cualquier estímulo que, al presentarse o retirarse inmediatamente después de una conducta, aumenta la probabilidad de que esa conducta vuelva a ocurrir en el futuro.</p>
+                    <p>• <strong>Positivo (+):</strong> Significa AÑADIR o entregar un estímulo al entorno.</p>
+                    <p>• <strong>Negativo (-):</strong> Significa RETIRAR o quitar un estímulo del entorno.</p>
+                    <p><em>Objetivo: AUMENTAR la frecuencia de la conducta.</em></p>
+                </div>
+
+                <div class="capsule">
+                    <h4>Castigo</h4>
+                    <p>Consiste en la aplicación o retiro de un estímulo inmediatamente después de una conducta con la finalidad de modificar la respuesta del sujeto.</p>
+                    <br>
+                    <p><em>Objetivo: DISMINUIR la frecuencia de la conducta.</em></p>
+                </div>
+
+                <div class="capsule" style="grid-column: 1 / -1;">
+                    <h4>Operacionalización de la Conducta</h4>
+                    <p>Consiste en definir un comportamiento de forma concreta, objetiva y observable, evitando etiquetas subjetivas.</p>
+                    <div class="highlight-box" style="margin-bottom:0;">
+                        <strong>Ejemplo práctico:</strong> En lugar de decir <em>"el niño está frustrado"</em>, se operacionaliza como <em>"el niño se tira al suelo, grita y golpea la mesa con la mano abierta"</em>.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 2: PLAN DE INTERVENCIÓN -->
+    <section id="sec2" class="content-section">
+        <div class="card">
+            <h2>📋 Plan de Intervención en ABA (10 Pasos)</h2>
+            <p>Haz clic en cada paso para desplegar la información completa:</p>
+
+            <div class="stepper-diagram">
+                <div class="step-item active" onclick="toggleStep(this)">
+                    <div class="step-header">
+                        <div><span class="step-number">1</span>Paso Uno: Evaluación Inicial y definición operacional</div>
+                        <span>▼</span>
+                    </div>
+                    <div class="step-body">
+                        <p>Fase diagnóstica y de línea de base.</p>
+                        <ul>
+                            <li><strong>Entrevista clínica y observación directa:</strong> Recopilación de información con cuidadores y docentes.</li>
+                            <li><strong>Definición operacional:</strong> Redacción objetiva, clara y observable del exceso conductual (conducta problema) o déficit conductual (habilidad a enseñar).</li>
+                            <li><strong>Evaluación de habilidades:</strong> Aplicación de herramientas estandarizadas como VB-MAPP, ABLLS-R o EFL.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step-item" onclick="toggleStep(this)">
+                    <div class="step-header">
+                        <div><span class="step-number">2</span>Paso Dos: Análisis funcional de la conducta</div>
+                        <span>▼</span>
+                    </div>
+                    <div class="step-body">
+                        <p>Identificación del patrón A-B-C.</p>
+                        <ul>
+                            <li>Registros en formato A-B-C para determinar la función de la conducta: Atención, Escape/Evitación, Acceso a Tangibles o Sensorial/Automático.</li>
+                            <li>Observación del paciente en su entorno natural (hogar, aula o clínica) registrando de manera sistemática los Antecedentes (qué ocurre antes), la Conducta (qué hace exactamente) y las Consecuencias (qué ocurre inmediatamente después).</li>
+                            <li>Identificar si el comportamiento problemático está mantenido por refuerzo positivo social (atención o acceso a tangibles), refuerzo negativo (escape o evitación de demandas), o refuerzo automático (estimulación o autorregulación sensorial).</li>
+                            <li>Medir la frecuencia, duración, intensidad o latencia actual de la conducta antes de iniciar la intervención para establecer el punto de partida comparativo.</li>
+                            <li>Determinar e identificar una habilidad alternativa funcionalmente equivalente que reemplace la conducta no deseada, cumpliendo la misma función, pero de forma adaptativa.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step-item" onclick="toggleStep(this)">
+                    <div class="step-header">
+                        <div><span class="step-number">3</span>Paso Tres: Evaluación de preferencias e inventario de reforzadores</div>
+                        <span>▼</span>
+                    </div>
+                    <div class="step-body">
+                        <p>Identificación de la motivación de entrada.</p>
+                        <ul>
+                            <li><strong>Evaluación de preferencias:</strong> Realizar observaciones directas, listas de cotejo o pruebas formales de preferencia (presentación simultánea o secuencial de estímulos) para determinar qué objetos, actividades o reconocimientos motivan realmente al paciente.</li>
+                            <li><strong>Selección de reforzadores efectivos:</strong> Clasificar reforzadores tangibles, sociales, de actividad o simbólicos, asegurando su rotación periódica para prevenir la saciación.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step-item" onclick="toggleStep(this)">
+                    <div class="step-header">
+                        <div><span class="step-number">4</span>Paso Cuatro: Diseño del plan de intervención conductual</div>
+                        <span>▼</span>
+                    </div>
+                    <div class="step-body">
+                        <p>Formulación de estrategias de modificación.</p>
+                        <ul>
+                            <li><strong>Estrategias antecedentes:</strong> Manejo ambiental, historias sociales, agendas visuales y control de estímulos.</li>
+                            <li><strong>Estrategias consecuentes:</strong> Manejo de contingencias, extinción, costo de respuesta o economía de fichas.</li>
+                            <li><strong>Conducta alternativa incompatible (DRA/DRI/FCT):</strong> Entrenamiento en comunicación funcional o habilidades de reemplazo.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step-item" onclick="toggleStep(this)">
+                    <div class="step-header">
+                        <div><span class="step-number">5</span>Paso Cinco: Implementación, registro y entrenamiento a cuidadores</div>
+                        <span>▼</span>
+                    </div>
+                    <div class="step-body">
+                        <p>Ejecución y generalización.</p>
+                        <ul>
+                            <li><strong>Capacitación en el procedimiento:</strong> Enseñar al equipo terapéutico y a la familia mediante modelado activo, ensayo conductual y retroalimentación directa.</li>
+                            <li><strong>Consistencia intercontextual:</strong> Garantizar que las mismas reglas, respuestas y reforzadores se apliquen de forma coherente en la clínica, el hogar y la escuela.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step-item" onclick="toggleStep(this)">
+                    <div class="step-header">
+                        <div><span class="step-number">6</span>Paso Seis: Implementación progresiva del plan</div>
+                        <span>▼</span>
+                    </div>
+                    <div class="step-body">
+                        <ul>
+                            <li><strong>Introducción de reforzadores de alto valor:</strong> Iniciar con una alta frecuencia de refuerzo para establecer rápidamente el interés y la adhesión del paciente.</li>
+                            <li><strong>Aplicación sistemática:</strong> Ejecutar las contingencias diseñadas de manera contingente e inmediata a la presencia de la conducta esperada.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step-item" onclick="toggleStep(this)">
+                    <div class="step-header">
+                        <div><span class="step-number">7</span>Paso Siete: Registro continuo de datos y monitoreo gráfico</div>
+                        <span>▼</span>
+                    </div>
+                    <div class="step-body">
+                        <ul>
+                            <li><strong>Toma de datos en tiempo real:</strong> Registrar diariamente métricas de desempeño (frecuencia, porcentaje de aciertos, latencia) en hojas de registro físicas o software especializado.</li>
+                            <li><strong>Visualización en gráficas:</strong> Trazar curvas de tendencia (gráficas de línea) para evaluar de forma visual la evolución del comportamiento frente a la línea base.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step-item" onclick="toggleStep(this)">
+                    <div class="step-header">
+                        <div><span class="step-number">8</span>Paso Ocho: Análisis de resultados y ajustes del plan</div>
+                        <span>▼</span>
+                    </div>
+                    <div class="step-body">
+                        <ul>
+                            <li><strong>Evaluación basada en evidencia:</strong> Revisar periódicamente las gráficas para verificar si hay progreso sostenido.</li>
+                            <li><strong>Ajustes oportunos:</strong> Si los datos demuestran estancamiento o un aumento no deseado de la conducta, cambiar el reforzador, ajustar la intensidad del estímulo o revisar la hipótesis funcional.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step-item" onclick="toggleStep(this)">
+                    <div class="step-header">
+                        <div><span class="step-number">9</span>Paso Nueve: Generalización y mantenimiento</div>
+                        <span>▼</span>
+                    </div>
+                    <div class="step-body">
+                        <ul>
+                            <li><strong>Generalización de habilidades:</strong> Promover que las conductas aprendidas se ejecuten ante diferentes personas, entornos (escuela, parque, comunidad) y estímulos.</li>
+                            <li><strong>Paso al refuerzo intermitente:</strong> Transicionar progresivamente de un programa de refuerzo continuo a uno intermitente para imitar las condiciones naturales del entorno.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step-item" onclick="toggleStep(this)">
+                    <div class="step-header">
+                        <div><span class="step-number">10</span>Paso Diez: Desvanecimiento de apoyos y cierre del programa</div>
+                        <span>▼</span>
+                    </div>
+                    <div class="step-body">
+                        <ul>
+                            <li><strong>Reducción gradual de la intervención:</strong> Disminuir progresivamente la presencia del terapeuta y el uso de reforzadores artificiales a medida que el paciente gana autonomía.</li>
+                            <li><strong>Evaluación final y seguimiento:</strong> Realizar evaluaciones periódicas de seguimiento para confirmar la estabilidad del cambio conductual a largo plazo.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 3: FUNCIONES DE LA CONDUCTA -->
+    <section id="sec3" class="content-section">
+        <div class="card">
+            <h2>🧩 Las 4 Funciones de la Conducta</h2>
+            <p>Despliega cada categoría para consultar la dinámica A-B-C asociada:</p>
+
+            <button class="accordion" onclick="toggleAccordion(this)">1. Atención <span>▼</span></button>
+            <div class="panel">
+                <div class="panel-content">
+                    <p><strong>Definición:</strong> La conducta ocurre con el objetivo de obtener acceso a la interacción social o reacción de otra persona (padres, terapeutas, docentes o pares).</p>
+                    <div class="highlight-box">
+                        <strong>Dinámica A-B-C:</strong><br>
+                        • <strong>Antecedente:</strong> La persona está ocupada o no le presta atención al niño.<br>
+                        • <strong>Conducta:</strong> El niño emite la conducta (gritar, tirar un objeto, hacer una pregunta repetitiva).<br>
+                        • <strong>Consecuencia:</strong> La persona voltea, mira al niño, le habla o lo regaña.
+                    </div>
+                    <p><strong>Nota clínica:</strong> La atención "negativa" (como regañar o mirar con desaprobación) funciona clínicamente como reforzador positivo si incrementa la frecuencia de la conducta.</p>
+                </div>
+            </div>
+
+            <button class="accordion" onclick="toggleAccordion(this)">2. Escape / Evitación <span>▼</span></button>
+            <div class="panel">
+                <div class="panel-content">
+                    <p><strong>Definición:</strong> La conducta ocurre para posponer, detener o evitar una tarea, demanda, estímulo aversivo, instrucción o situación no deseada.</p>
+                    <div class="highlight-box">
+                        <strong>Dinámica A-B-C:</strong><br>
+                        • <strong>Antecedente:</strong> Se le presenta una instrucción o demanda de trabajo ("recoje los juguetes" o "haz la tarea").<br>
+                        • <strong>Conducta:</strong> El niño presenta una conducta problema (berrinche, agresión, tirarse al suelo).<br>
+                        • <strong>Consecuencia:</strong> Se retira la demanda, se le da un tiempo fuera o se interrumpe la actividad.
+                    </div>
+                </div>
+            </div>
+
+            <button class="accordion" onclick="toggleAccordion(this)">3. Acceso a Tangibles / Actividades <span>▼</span></button>
+            <div class="panel">
+                <div class="panel-content">
+                    <p><strong>Definición:</strong> La conducta se produce para obtener un objeto físico específico (juguete, comida, dispositivo electrónico) o para acceder a una actividad preferida.</p>
+                    <div class="highlight-box">
+                        <strong>Dinámica A-B-C:</strong><br>
+                        • <strong>Antecedente:</strong> Se le niega o retira un objeto/actividad deseada (apagar la tablet).<br>
+                        • <strong>Conducta:</strong> El niño llora, muerde o golpea.<br>
+                        • <strong>Consecuencia:</strong> Se le entrega el objeto o la tablet para "calmarlo".
+                    </div>
+                </div>
+            </div>
+
+            <button class="accordion" onclick="toggleAccordion(this)">4. Sensorial / Automática <span>▼</span></button>
+            <div class="panel">
+                <div class="panel-content">
+                    <p><strong>Definición:</strong> La conducta produce directamente una estimulación física o sensorial placentera, o reduce una molestia interna (dolor, ansiedad). No requiere de otra persona para mantenerse o ser reinforced.</p>
+                    <div class="highlight-box">
+                        <strong>Dinámica A-B-C:</strong><br>
+                        • <strong>Antecedente:</strong> Estado de sobreestimulación, bajo nivel de estimulación (aburrimiento) o malestar físico.<br>
+                        • <strong>Conducta:</strong> Estereotipias motoras/verbales (aleteo de manos, balanceo, ecolalias, rascarse).<br>
+                        • <strong>Consecuencia:</strong> Retroalimentación sensorial interna inmediata (propioceptiva, vestibular, táctil).
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 4: ANÁLISIS FUNCIONAL -->
+    <section id="sec4" class="content-section">
+        <div class="card">
+            <h2>🔬 Procedimiento del Análisis Funcional</h2>
+            <ol>
+                <li><strong>Definir la conducta problema de forma operacional:</strong> Describir exactamente qué hace el niño, sin etiquetas subjetivas (ej. en lugar de "se porta mal", escribir "tira los juguetes al suelo").</li>
+                <li><strong>Registrar el Antecedente (A):</strong> Identificar qué sucedió justo antes de que ocurriera la conducta (lugar, personas presentes, instrucción dada, estimulación sensorial).</li>
+                <li><strong>Registrar la Conducta (B):</strong> Medir y detallar la acción concreta observada:
+                    <ul style="margin-top:8px;">
+                        <li><strong>Frecuencia (o Tasa):</strong> Número total de veces que ocurre la conducta dentro de un periodo de observación determinado (ej. emitir 8 episodios de gritos en una sesión de 45 minutos).</li>
+                        <li><strong>Duración:</strong> Intervalo de tiempo continuo desde que se inicia la conducta hasta que cesa por completo.</li>
+                        <li><strong>Intensidad (o Fuerza):</strong> Magnitud o fuerza física con la que se manifiesta la conducta. Se evalúa habitualmente mediante escalas Likert cuantitativas de observación (ej. Nivel 1: llanto bajo; Nivel 3: gritos con golpes a objetos).</li>
+                        <li><strong>Latencia:</strong> Tiempo transcurrido entre la presentación del estímulo antecedente (instrucción o demanda) y el inicio efectivo de la respuesta/conducta.</li>
+                        <li><strong>Tiempo Entre Respuestas (IRT - Inter-Response Time):</strong> Cantidad de tiempo que transcurre entre el final de una instancia de la conducta y el inicio de la siguiente instancia de la misma conducta (ej. transcurren 3 minutos entre un episodio de autolesión y el siguiente).</li>
+                    </ul>
+                </li>
+                <li><strong>Registrar la Consecuencia (C):</strong> Observar qué ocurre inmediatamente después de la conducta (atención entregada, retirada de la demanda, entrega de un objeto).</li>
+                <li><strong>Deducir la función de la conducta:</strong> Determinar cuál es la necesidad que satisface la conducta según cuatro funciones básicas (Escape/Evitación, Atención, Acceso a Tangibles, Sensorial/Automático).</li>
+            </ol>
+        </div>
+
+        <div class="card">
+            <h2>📑 Ejemplo Práctico de Análisis Funcional</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Paso del Análisis</th>
+                            <th>Dimensión</th>
+                            <th>Descripción Detallada</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1. Conducta Problema</strong></td>
+                            <td>Topografía Objetiva</td>
+                            <td>El niño empuja el material mesa abajo con la mano abierta, emite gritos agudos y se golpea con el puño cerrado en el muslo derecho. (Se excluyen etiquetas como "está frustrado" o "se porta mal").</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2. Antecedente (A)</strong></td>
+                            <td>Estímulo / Contexto</td>
+                            <td>La terapeuta presenta una hoja de trabajo de encaje numérico y da la instrucción verbal: "Lucas, coloca el número 5 en el espacio correspondiente". Entorno con ruido ambiental moderado.</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="5"><strong>3. Registro de la Conducta (B)</strong></td>
+                            <td>Frecuencia (Tasa)</td>
+                            <td>Ocurre 4 veces en la sesión de 45 minutos.</td>
+                        </tr>
+                        <tr>
+                            <td>Duración</td>
+                            <td>Cada episodio tiene una duración promedio de 35 segundos continuos.</td>
+                        </tr>
+                        <tr>
+                            <td>Intensidad (Fuerza)</td>
+                            <td>Nivel 3/4 en Escala Likert: Tira el material con suficiente fuerza para mover la mesa, dejando marcas rojas visibles en el muslo.</td>
+                        </tr>
+                        <tr>
+                            <td>Latencia</td>
+                            <td>Transcurren 12 segundos entre la entrega de la instrucción verbal ("coloca el 5") y el inicio del primer grito.</td>
+                        </tr>
+                        <tr>
+                            <td>Tiempo Entre Respuestas (IRT)</td>
+                            <td>Transcurren aproximadamente 8 minutos entre el final del primer episodio de autoagresión y el inicio del siguiente episodio ante una nueva demanda.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4. Consecuencia (C)</strong></td>
+                            <td>Reacción del Entorno</td>
+                            <td>La terapeuta retira la hoja de encaje numérico, toma las manos de Lucas para bloquear la autoagresión y dice en voz baja: "Tranquilo, vamos a tomar una pausa de 3 minutos".</td>
+                        </tr>
+                        <tr>
+                            <td><strong>5. Función de la Conducta</strong></td>
+                            <td>Hipótesis Funcional</td>
+                            <td><strong>Escape / Evitación de la demanda pedagógica.</strong> La conducta de tirar el material y autoagredirse le permite acceder a la retirada inmediata de la tarea académica percibida como de alta exigencia.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Estrategias de Intervención Derivadas del Ejemplo</h3>
+            <div class="capsule-grid">
+                <div class="capsule">
+                    <h4>1. Estrategia en antecedentes (Prevención)</h4>
+                    <p>Estructurar la actividad mediante un panel visual "Primero / Después" y fragmentar el ejercicio en ensayos discretos simples (un solo número a la vez).</p>
+                </div>
+                <div class="capsule">
+                    <h4>2. Conducta de reemplazo (DRA)</h4>
+                    <p>Enseñar a Lucas a entregar la tarjeta con el pictograma de "PAUSA" antes de llegar al nivel de sobrecarga.</p>
+                </div>
+                <div class="capsule">
+                    <h4>3. Manejo de Consecuencias</h4>
+                    <p>• <strong>Ante conducta de reemplazo (Tarjeta):</strong> Otorgar inmediatamente 1 minuto de descanso con juguete sensorial.</p>
+                    <p>• <strong>Ante conducta problema (Gritos/Golpes):</strong> Aplicar extinción de escape (guía física atenuada para terminar un ensayo corto antes de la pausa, bloqueando golpes).</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 5: ESTRATEGIAS -->
+    <section id="sec5" class="content-section">
+        <div class="card">
+            <h2>🛠️ Estrategias de Implementación Conductual</h2>
+            <p>Selecciona una estrategia para abrir la ventana modal interactiva con su detalle técnico:</p>
+
+            <div class="capsule-grid">
+                <div class="capsule">
+                    <h4>1. Refuerzo Diferencial (DRA)</h4>
+                    <p>Conductas alternativas adaptativas.</p>
+                    <button class="capsule-action" onclick="openModal('1. Refuerzo Diferencial de Conductas Alternativas (DRA)', 'Consiste en dejar de reforzar la conducta problema y otorgar refuerzo de forma contingente ante una conducta alternativa adaptativa que cumple exactamente la misma función.', 'Cuando se identifica la función de la conducta problema y el paciente cuenta con el repertorio o la posibilidad de aprender una conducta de reemplazo más adecuada (ej. entregar una tarjeta de Pausa en lugar de gritar para escapar de una tarea).')">Ver Detalle ➔</button>
+                </div>
+
+                <div class="capsule">
+                    <h4>2. Refuerzo Diferencial (DRI)</h4>
+                    <p>Conductas incompatibles.</p>
+                    <button class="capsule-action" onclick="openModal('2. Refuerzo Diferencial de Conductas Incompatibles (DRI)', 'Se refuerza una conducta que es físicamente imposible de realizar de manera simultánea con la conducta indeseada.', 'Para eliminar conductas problema motrices o autolesivas mediante la sustitución por acciones físicamente opuestas (ej. reforzar que el niño mantenga las manos en las rodillas para evitar que se pellizque la cara).')">Ver Detalle ➔</button>
+                </div>
+
+                <div class="capsule">
+                    <h4>3. Refuerzo Diferencial (DRO)</h4>
+                    <p>Omisión de conducta problema.</p>
+                    <button class="capsule-action" onclick="openModal('3. Refuerzo Diferencial de Otra Conducta (DRO)', 'Se administra un reforzador si la conducta problema NO ocurre durante un intervalo de tiempo previamente especificado, sin importar qué otra conducta esté realizando el niño.', 'Cuando se busca reducir drásticamente la tasa de conductas problema muy disruptivas o peligrosas que no cuentan aún con una conducta alternativa clara a moldear (ej. cero episodios de agresión durante lapsos de 5 minutos).')">Ver Detalle ➔</button>
+                </div>
+
+                <div class="capsule">
+                    <h4>4. Moldeamiento (Shaping)</h4>
+                    <p>Aproximaciones sucesivas.</p>
+                    <button class="capsule-action" onclick="openModal('4. Moldeamiento (Shaping)', 'Proceso en el cual se refuerzan de forma sistemática y gradual las aproximaciones sucesivas hacia una conducta meta que el paciente aún no realiza por completo.', 'Para enseñar habilidades completamente nuevas que no forman parte del repertorio actual del usuario (ej. pasar de emitir un balbuceo inicial a pronunciar una palabra completa).')">Ver Detalle ➔</button>
+                </div>
+
+                <div class="capsule">
+                    <h4>5. Encadenamiento (Chaining)</h4>
+                    <p>Análisis de tareas secuenciales.</p>
+                    <button class="capsule-action" onclick="openModal('5. Encadenamiento (Chaining)', 'Procedimiento que divide una habilidad compleja en una secuencia ordenada de pasos individuales (Análisis de Tareas) que se van enseñando y uniendo progresivamente (hacia adelante, hacia atrás o por tarea total).', 'En el entrenamiento de habilidades de la vida diaria y autonomía personal que requieren múltiples pasos secuenciales (ej. lavarse las manos, vestirse, atarse los cordones).')">Ver Detalle ➔</button>
+                </div>
+
+                <div class="capsule">
+                    <h4>6. Modelado en Vivo</h4>
+                    <p>Imitación en tiempo real.</p>
+                    <button class="capsule-action" onclick="openModal('6. Modelado en Vivo (In Vivo Modeling)', 'Un modelo (terapeuta, tutor o par) demuestra en tiempo real la conducta esperada frente al paciente para que este la observe e imite inmediatamente.', 'Al enseñar habilidades sociales, de juego estructurado o imitación motriz/verbal en pacientes que ya cuentan con capacidad de atención compartida e imitación previa.')">Ver Detalle ➔</button>
+                </div>
+
+                <div class="capsule">
+                    <h4>7. Economía de Fichas</h4>
+                    <p>Refuerzo condicionado acumulable.</p>
+                    <button class="capsule-action" onclick="openModal('7. Economía de Fichas (Token Economy)', 'Sistema de refuerzo condicionado donde la emisión de conductas meta predeterminadas premia al paciente con fichas o puntos acumulables que luego se canjean por reforzadores de respaldo.', 'Para incrementar el seguimiento de reglas, la permanencia en la tarea y la motivación general en entornos escolares, clínicos o del hogar.')">Ver Detalle ➔</button>
+                </div>
+
+                <div class="capsule">
+                    <h4>8. Desvanecimiento de Apoyos</h4>
+                    <p>Prompt Fading y autonomía.</p>
+                    <button class="capsule-action" onclick="openModal('8. Desvanecimiento de Apoyos (Prompt Fading)', 'Reducción gradual y sistemática del nivel de ayuda provisto (física, gestual, verbal o visual) a medida que el niño gana autonomía en la ejecución.', 'Durante la fase de consolidación de cualquier habilidad para evitar la dependencia de ayudas y lograr la independencia completa del paciente.')">Ver Detalle ➔</button>
+                </div>
+
+                <div class="capsule">
+                    <h4>9. Extinción (Extinction)</h4>
+                    <p>Suspensión de reforzadores.</p>
+                    <button class="capsule-action" onclick="openModal('9. Extinción (Extinction)', 'Suspensión total e ininterrumpida del reforzador específico que estaba manteniendo una conducta problema (atención, acceso a tangible o escape).', 'Exclusivamente en combinación con un programa de refuerzo diferencial (DRA/DRI) para eliminar conductas indeseadas cuyo reforzador de mantenimiento esté totalmente identificado y pueda ser controlado por el entorno.')">Ver Detalle ➔</button>
+                </div>
+
+                <div class="capsule">
+                    <h4>10. Costo de Respuesta</h4>
+                    <p>Retiro contingente de fichas.</p>
+                    <button class="capsule-action" onclick="openModal('10. Costo de Respuesta (Response Cost)', 'Retiro contingente de una cantidad específica de reforzadores o fichas previamente ganadas tras la emisión de una conducta disruptiva grave.', 'Como componente de manejo de consecuencias dentro de un programa de Economía de Fichas ya established y comprendido por el paciente, ante conductas disfuncionales bien definidas.')">Ver Detalle ➔</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 6: CASO CLÍNICO -->
+    <section id="sec6" class="content-section">
+        <div class="card">
+            <h2>📁 Socialización del Caso Clínico</h2>
+            
+            <button class="accordion" onclick="toggleAccordion(this)">1. Descripción y diagnóstico del paciente <span>▼</span></button>
+            <div class="panel">
+                <div class="panel-content">
+                    <ul>
+                        <li><strong>Datos generales del paciente:</strong> Información filiatoria y contexto sociodemográfico.</li>
+                        <li><strong>Diagnóstico Clínico (DSM-5):</strong> Criterios clínicos y comorbilidades evaluadas.</li>
+                        <li><strong>Conductas problema operacionalizadas:</strong> Definiciones objetivas y observables de los excesos y déficits conductuales.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button class="accordion" onclick="toggleAccordion(this)">2. Análisis funcional de la conducta y plan de intervención <span>▼</span></button>
+            <div class="panel">
+                <div class="panel-content">
+                    <p>Consolidación del patrón A-B-C, formulación de hipótesis funcionales de mantenimiento y estructuración del plan de intervención conductual individualizado.</p>
+                </div>
+            </div>
+
+            <button class="accordion" onclick="toggleAccordion(this)">3. Análisis reflexivo del desempeño clínico <span>▼</span></button>
+            <div class="panel">
+                <div class="panel-content">
+                    <ul>
+                        <li><strong>Aciertos:</strong> Estrategias que mostraron efectividad en la disminución de la conducta o adquisición de la habilidad.</li>
+                        <li><strong>Desaciertos:</strong> Inconsistencias en la aplicación o fallas en el control de estímulos.</li>
+                        <li><strong>Obstáculos y limitaciones:</strong> Factores ambientales, familiares o institucionales que dificultaron el proceso.</li>
+                        <li><strong>Lecciones aprendidas:</strong> Reflexiones para la práctica clínica basada en evidencia.</li>
+                        <li><strong>Recomendaciones por mejorar:</strong> Ajustes metodológicos y de seguimiento para futuras intervenciones.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 7: REFERENCIAS -->
+    <section id="sec7" class="content-section">
+        <div class="card">
+            <h2>📚 Referencias Bibliográficas</h2>
+            <ul>
+                <li>Politécnico Intercontinental. (s. f.). <em>Diplomado en: Técnica ABA (Análisis de la conducta aplicada). Unidad 1: Fundamentos del análisis de la conducta aplicada (ABA)</em>. Politécnico Intercontinental.</li>
+                <li>Politécnico Intercontinental. (s. f.). <em>Diplomado en: Técnica ABA (Análisis de la conducta aplicada). Unidad 2: Evaluación conductual y diseño de programas de intervención</em>. Politécnico Intercontinental.</li>
+                <li>Politécnico Intercontinental. (s. f.). <em>Diplomado en: Técnica ABA (Análisis de la conducta aplicada). Unidad 3: Implementación y supervisión de programas de ABA</em>. Politécnico Intercontinental.</li>
+                <li>Politécnico Intercontinental. (s. f.). <em>Diplomado en: Técnica ABA (Análisis de la conducta aplicada). Unidad 4: Ética y mejores prácticas en (ABA)</em>. Politécnico Intercontinental.</li>
+            </ul>
+        </div>
+    </section>
+
+</main>
+
+<!-- MODAL FLOTANTE INTERACTIVO -->
+<div id="strategyModal" class="modal-overlay" onclick="closeModalOnOverlay(event)">
+    <div class="modal-card">
+        <button class="close-modal" onclick="closeModal()">&times;</button>
+        <h3 id="modalTitle" style="color:var(--primary-color); margin-bottom:15px;"></h3>
+        <p><strong>Descripción:</strong></p>
+        <p id="modalDescription"></p>
+        <div class="highlight-box" style="margin-bottom:0;">
+            <strong>Cuándo utilizarla:</strong>
+            <p id="modalUsage" style="margin:5px 0 0;"></p>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p><strong>Objeto Virtual de Aprendizaje (OVA) — Análisis Conductual Aplicado (ABA)</strong></p>
+    <p>Autor: Psic. Gesner Piamba Bustamante</p>
+</footer>
+
+<script>
+    // CONTROL DEL MENÚ VERTICAL DESPLEGABLE
+    function toggleMenu() {
+        const drawer = document.getElementById('sidebarDrawer');
+        const overlay = document.getElementById('drawerOverlay');
+        drawer.classList.toggle('open');
+        overlay.classList.toggle('active');
+    }
+
+    function closeMenu() {
+        document.getElementById('sidebarDrawer').classList.remove('open');
+        document.getElementById('drawerOverlay').classList.remove('active');
+    }
+
+    function navigateTo(sectionId) {
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.classList.remove('active');
+        });
+        
+        document.querySelectorAll('.sidebar-nav button').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        document.getElementById(sectionId).classList.add('active');
+        document.getElementById('btn-' + sectionId).classList.add('active');
+        
+        closeMenu();
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    // ACORDEONES
+    function toggleAccordion(button) {
+        button.classList.toggle("active");
+        var panel = button.nextElementSibling;
+        if (panel.style.maxHeight) {
+            panel.style.maxHeight = null;
+        } else {
+            panel.style.maxHeight = panel.scrollHeight + "px";
+        }
+    }
+
+    // DIAGRAMA DE PASOS
+    function toggleStep(element) {
+        element.classList.toggle("active");
+    }
+
+    // MODAL INTERACTIVO
+    function openModal(title, description, usage) {
+        document.getElementById('modalTitle').innerText = title;
+        document.getElementById('modalDescription').innerText = description;
+        document.getElementById('modalUsage').innerText = usage;
+        document.getElementById('strategyModal').classList.add('active');
+    }
+
+    function closeModal() {
+        document.getElementById('strategyModal').classList.remove('active');
+    }
+
+    function closeModalOnOverlay(event) {
+        if (event.target.id === 'strategyModal') {
+            closeModal();
+        }
+    }
+</script>
+
+</body>
+</html>
